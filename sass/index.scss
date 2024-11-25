@@ -33,7 +33,7 @@ img {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 // Colors Variables
@@ -86,7 +86,7 @@ main {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    top: 120px;
+    top: 164px;
     left: 210px;
     .player-1-img {
       position: absolute;
@@ -126,7 +126,7 @@ main {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    top: 120px;
+    top: 164px;
     right: 210px;
     .player-2-img {
       position: absolute;
@@ -162,47 +162,59 @@ main {
   }
 
   .table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
     .table-imgs {
-      position: relative;
+      position: absolute;
       .white-table {
-        z-index: 1;
         position: absolute;
-        width: 40%;
-        right: 30%;
+        z-index: 1;
       }
       .black-table {
         position: absolute;
-        width: 40%;
-        right: 30%;
+        z-index: 0;
       }
     }
   }
   table {
-    &::after {
-      background-image: url(/images/board-layer-black-small.42afffd73e45d00ba497.svg);
-      background-repeat: no-repeat;
-      
-    }
-    height: 52%;
-    width: 40%;
-    position: absolute;
-    right: 30%;
-    z-index: 1;
+    border-spacing: 20px; // Adds spacing between cells for the hollow circle design
+    background-color: var(--clr-lightWhite);
+    border-radius: 48px;
+    padding-bottom: 40px;
+    box-shadow: 0 11px 0 black;
+    position: relative;
+    border: 3px solid black;
     td {
+      width: 60px;
+      height: 60px;
+      position: relative;
+      border-radius: 50%;
+      background: var(--clr-purple);
+      border: 3px solid black;
+      cursor: pointer;
+      overflow: hidden;
       &::before {
         content: '';
-        display: block;
+        position: absolute;
+        top: 0%;
+        left: 0%;
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        z-index: 0;
+        z-index: 1;
       }
-    }
-    td.pink:before {
-      background: var(--clr-pink);
-    }
-    td.yellow:before {
-      background: var(--clr-yellow);
+      &:hover {
+        transform: scale(1.1);
+        transition: transform 0.2s ease;
+      }
+      &.pink::before {
+        background-color: var(--clr-pink);
+      }
+      &.yellow::before {
+        background-color: var(--clr-yellow);
+      }
     }
   }
 }
@@ -213,14 +225,17 @@ main {
   .images-container {
     img {
       position: absolute;
-      top: 53%;
+      top: 56%;
       left: 43.2%;
       z-index: 1;
     }
     .player-1-footer {
+      &.white-background {
+        background-color: var(--clr-lightWhite) !important;
+      }
       .player-1-footer-text-container {
         position: absolute;
-        top: 58.4%;
+        top: 61%;
         left: 45.1%;
         z-index: 2;
         text-align: center;
@@ -239,9 +254,12 @@ main {
       }
     }
     .player-2-footer {
+      &.white-background {
+        background-color: var(--clr-lightWhite) !important;
+      }
       .player-2-footer-text-container {
         position: absolute;
-        top: 58.4%;
+        top: 61%;
         left: 45.1%;
         z-index: 2;
         text-align: center;
@@ -260,12 +278,70 @@ main {
         }
       }
     }
+    .win-card-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      top: 57%;
+      right: 39.3%;
+      .player-win-text {
+        text-align: center;
+        position: absolute;
+        top: 16px;
+        z-index: 1;
+        .player-win {
+          font-size: 18px;
+          line-height: 21px;
+          text-transform: uppercase;
+          font-weight: 600;
+          margin-bottom: 28px;
+        }
+        .win {
+          text-transform: uppercase;
+          font-size: 60px;
+          line-height: 21px;
+          font-weight: 600;
+          margin-bottom: 26px;
+        }
+        .play-again-btn {
+          background-color: var(--clr-darkPurple);
+          border: none;
+          border-radius: 20px;
+          color: var(--clr-lightWhite);
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: 500;
+          height: 39px;
+          line-height: 21px;
+          text-transform: uppercase;
+          width: 108px;
+        }
+      }
+      .win-card {
+        background-color: var(--clr-lightWhite);
+        border: 3px solid black;
+        border-radius: 20px;
+        box-shadow: 0 10px 0 black;
+        flex-direction: row;
+        height: 160px;
+        position: relative;
+        width: 300px;
+      }
+    }
   }
   .footer-background {
+    &.player-2-background {
+      background-color: var(--clr-yellow) !important;
+    }
+    &.player-1-background {
+      background-color: var(--clr-pink) !important;
+    }
     background-color: var(--clr-darkPurple);
     border-radius: 5%;
     position: absolute;
-    top: 52%;
+    top: 56%;
     width: 100%;
     height: 40%;
     z-index: -1;
