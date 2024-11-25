@@ -82,7 +82,7 @@ function renderGame(result) {
             .fill()
             .map(
               (_, col) => `
-            <td class="${['', colorTwo, colorOne][columns[col][5 - row]]}"></td>
+            <td class="${['', 'yellow', 'pink'][columns[col][5 - row]]}"></td>
           `
             )
             .join('')}
@@ -95,15 +95,19 @@ function renderGame(result) {
   if (result == 1) displayWinner(1);
   if (result == 2) displayWinner(2);
 
-  document.querySelector('.play-again-btn').addEventListener('click', () => {
-    resetGame(renderGame);
-    if (result == 1) displayWinner(1);
-    if (result == 2) displayWinner(2);
-    displayPlayer();
-  });
-
+  
   displayPlayer();
 }
+
+document.querySelector('.play-again-btn').addEventListener('click', () => {
+  resetGame(renderGame);
+  document.querySelector('.win-card-container').classList.add('hidden');
+  document.querySelector('.player-1-footer').classList.remove('hidden');
+  document.querySelector('.player-2-footer').classList.add('hidden');
+  const footerClassnames = document.querySelector('.footer-background').className;
+  const toBeRemovedClass = footerClassnames.slice(footerClassnames.indexOf(' ')+1);
+  document.querySelector('.footer-background').classList.remove(toBeRemovedClass);
+});
 
 // Setup event listeners
 document.querySelector('#container').addEventListener('click', event => {
