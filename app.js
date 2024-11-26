@@ -95,23 +95,33 @@ function renderGame(result) {
   if (result == 1) displayWinner(1);
   if (result == 2) displayWinner(2);
 
-  
   displayPlayer();
+
+  setTimer();
 }
 
 document.querySelector('.play-again-btn').addEventListener('click', () => {
   resetGame(renderGame);
+
   document.querySelector('.win-card-container').classList.add('hidden');
   document.querySelector('.player-1-footer').classList.remove('hidden');
   document.querySelector('.player-2-footer').classList.add('hidden');
-  const footerClassnames = document.querySelector('.footer-background').className;
-  const toBeRemovedClass = footerClassnames.slice(footerClassnames.indexOf(' ')+1);
-  document.querySelector('.footer-background').classList.remove(toBeRemovedClass);
+  const footerClassnames =
+    document.querySelector('.footer-background').className;
+  const toBeRemovedClass = footerClassnames.slice(
+    footerClassnames.indexOf(' ') + 1
+  );
+  document
+    .querySelector('.footer-background')
+    .classList.remove(toBeRemovedClass);
+
+  clearInterval(setTimer());
 });
 
 // Setup event listeners
 document.querySelector('#container').addEventListener('click', event => {
   if (event.target.tagName === 'TD') {
+    setTimer();
     const cell = event.target;
     const column = Array.from(cell.parentNode.children).indexOf(cell);
     dropPiece(column);
@@ -120,17 +130,20 @@ document.querySelector('#container').addEventListener('click', event => {
 
 const clickRestartBtn = () => {
   const winCard = document.querySelector('.win-card-container');
-  console.log(winCard);
-  if (winCard.classList.contains('hidden')) {
-    document.querySelector('.restart-btn').addEventListener('click', () => {
+
+  document.querySelector('.restart-btn').addEventListener('click', () => {
+    if (winCard.classList.contains('hidden')) {
       resetGame(renderGame);
-    });
-  }
+      document.querySelector('.player-2-footer').classList.remove('hidden');
+      document.querySelector('.player-1-footer').classList.remove('hidden');
+      document.querySelector('.player-2-footer').classList.add('hidden');
+    }
+  });
 };
+clickRestartBtn();
 
 const displayWinner = player => {
   const playerNum = player == 1 ? 2 : 1;
-  // console.log(playerNum);
 
   const currentPlayerContainer = document.querySelector(
     `.player-${playerNum}-footer`
@@ -157,25 +170,40 @@ const displayPlayer = () => {
   playerTwo.classList.toggle('hidden');
 };
 
-let counter = 0;
+let counter = 1;
 const setTimer = () => {
   let sec = 30;
 
-  let timer = setInterval(function () {
-    const playerNum = counter % 2 == 0 ? 2 : 1;
+  const playerNum = counter % 2 == 0 ? 2 : 1;
 
-    const timerLabel = document.querySelector(
-      `.player-${playerNum}-timer-label`
-    );
-    console.log(timerLabel);
+  const timerLabel = document.querySelector(
+    `.player-${playerNum}-timer-label`
+  );
+  timerLabel.textContent = sec;
+
+  let timer = setInterval(function () {
     timerLabel.textContent = sec + '';
     sec--;
-
+    
     if (sec < 0) {
       clearInterval(timer);
+      displayWinner(playerNum);
+      displayPlayer();
     }
   }, 1000);
+
+  document.querySelector('#container').addEventListener('click', event => {
+    if (event.target.tagName === 'TD') {
+      clearInterval(timer);
+    }
+  });
+  document.querySelector('.restart-btn').addEventListener('click', () => {
+    clearInterval(timer);
+    setTimer();
+  });
+
   counter++;
+  return timer;
 };
 
 // Start the game
