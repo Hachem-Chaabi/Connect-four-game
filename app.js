@@ -207,7 +207,7 @@ const displayPlayer = () => {
 // Set timer
 let counter = 1;
 const setTimer = () => {
-  let sec = 5;
+  let sec = 30;
 
   const playerNum = counter % 2 == 0 ? 2 : 1;
 
