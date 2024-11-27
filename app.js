@@ -64,7 +64,10 @@ function getResult() {
   };
 
   const winner = checkWin(1) || checkWin(2);
-  if (winner) return winner;
+  if (winner) {
+    displayWinner(winner);
+    return winner;
+  }
 
   return moveCount === 42 ? -1 : 0; // -1 for tie, 0 for ongoing
 }
@@ -92,12 +95,17 @@ function renderGame(result) {
         .join('')}
     </table>`;
 
-  if (result == 1) displayWinner(1);
-  if (result == 2) displayWinner(2);
-
-  displayPlayer();
+  // if (result == 1) {
+  //   displayWinner(1);
+  //   clearInterval(setTimer());
+  // }
+  // if (result == 2) {
+  //   displayWinner(2);
+  //   clearInterval(setTimer());
+  // }
 
   setTimer();
+  displayPlayer();
 }
 
 document.querySelector('.play-again-btn').addEventListener('click', () => {
@@ -115,13 +123,12 @@ document.querySelector('.play-again-btn').addEventListener('click', () => {
     .querySelector('.footer-background')
     .classList.remove(toBeRemovedClass);
 
-  clearInterval(setTimer());
+  setTimer();
 });
 
 // Setup event listeners
 document.querySelector('#container').addEventListener('click', event => {
   if (event.target.tagName === 'TD') {
-    setTimer();
     const cell = event.target;
     const column = Array.from(cell.parentNode.children).indexOf(cell);
     dropPiece(column);
@@ -172,25 +179,32 @@ const displayPlayer = () => {
 
 let counter = 1;
 const setTimer = () => {
-  let sec = 30;
+  let sec = 5;
 
   const playerNum = counter % 2 == 0 ? 2 : 1;
 
-  const timerLabel = document.querySelector(
-    `.player-${playerNum}-timer-label`
-  );
+  const timerLabel = document.querySelector(`.player-${playerNum}-timer-label`);
   timerLabel.textContent = sec;
 
+  
   let timer = setInterval(function () {
     timerLabel.textContent = sec + '';
     sec--;
     
+    
+    console.log(sec);
+    
     if (sec < 0) {
       clearInterval(timer);
-      displayWinner(playerNum);
-      displayPlayer();
+      displayWinner(playerNum == 2 ? 1 : 2);
     }
   }, 1000);
+  
+  if (
+    !document.querySelector('.win-card-container').classList.contains('hidden')
+  ) {
+    clearInterval(timer);
+  }
 
   document.querySelector('#container').addEventListener('click', event => {
     if (event.target.tagName === 'TD') {
