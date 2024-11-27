@@ -16,7 +16,7 @@ function resetGame(callback) {
 // Drop a piece into a column
 function dropPiece(column) {
   const row = columns[column].indexOf(0);
-  if (row === -1 || getResult() !== 0) return;
+  if (row === -1 || getResult() !== 0 || !document.querySelector('.win-card-container').classList.contains('hidden')) return;
   columns[column][row] = (moveCount % 2) + 1;
   moveCount++;
   onChangeCallback(getResult());
@@ -64,10 +64,8 @@ function getResult() {
   };
 
   const winner = checkWin(1) || checkWin(2);
-  if (winner) {
-    displayWinner(winner);
-    return winner;
-  }
+  if (winner) return winner;
+
 
   return moveCount === 42 ? -1 : 0; // -1 for tie, 0 for ongoing
 }
@@ -95,14 +93,17 @@ function renderGame(result) {
         .join('')}
     </table>`;
 
-  // if (result == 1) {
-  //   displayWinner(1);
-  //   clearInterval(setTimer());
-  // }
-  // if (result == 2) {
-  //   displayWinner(2);
-  //   clearInterval(setTimer());
-  // }
+  if (result == 1) {
+    displayWinner(1);
+    clearInterval(setTimer());
+  }
+  if (result == 2) {
+    displayWinner(2);
+    // clearInterval(setTimer());
+  }
+  if(result == -1) {
+    console.log('TIE!');
+  }
 
   setTimer();
   displayPlayer();
@@ -191,10 +192,7 @@ const setTimer = () => {
     timerLabel.textContent = sec + '';
     sec--;
     
-    
-    console.log(sec);
-    
-    if (sec < 0) {
+    if (sec < -1) {
       clearInterval(timer);
       displayWinner(playerNum == 2 ? 1 : 2);
     }
