@@ -49,6 +49,7 @@ header .header-container {
   padding: 50px 380px 50px 380px;
 }
 header .header-container .menu-btn {
+  cursor: pointer;
   color: var(--clr-lightWhite);
   padding: 10px 20px;
   border: none;
@@ -62,6 +63,7 @@ header .header-container .menu-btn:hover {
   background-color: var(--clr-pink);
 }
 header .header-container .restart-btn {
+  cursor: pointer;
   color: var(--clr-lightWhite);
   padding: 10px 20px;
   border: none;

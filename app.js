@@ -103,12 +103,11 @@ function renderGame(result) {
   }
   if (result == 2) {
     displayWinner(2);
-    // clearInterval(setTimer());
   }
 
-  console.log(result);
   if (result == -1) {
     displayTie();
+    //
     document.querySelector('.tie-btn').addEventListener('click', () => {
       resetGame(renderGame);
 
@@ -118,7 +117,6 @@ function renderGame(result) {
 
       setTimer();
     });
-    // clearInterval(setTimer());
   }
 
   setTimer();
@@ -127,8 +125,6 @@ function renderGame(result) {
 
 document.querySelector('.play-again-btn').addEventListener('click', () => {
   resetGame(renderGame);
-
-  console.log(5);
 
   document.querySelector('.win-card-container').classList.add('hidden');
   document.querySelector('.player-1-footer').classList.remove('hidden');
@@ -146,7 +142,7 @@ document.querySelector('.play-again-btn').addEventListener('click', () => {
 });
 
 document.querySelector('#container').addEventListener('click', event => {
-  if (event.target.tagName === 'TD') {
+  if (event.target.tagName === 'TD' && event.target.className === '') {
     const cell = event.target;
     const column = Array.from(cell.parentNode.children).indexOf(cell);
     dropPiece(column);
@@ -169,10 +165,8 @@ const clickRestartBtn = () => {
 clickRestartBtn();
 
 const displayTie = () => {
-  // const playerNum = player == 1 ? 2 : 1;
-
-  const firstPlayerContainer = document.querySelector(`.player-${1}-footer`);
-  const secondPlayerContainer = document.querySelector(`.player-${2}-footer`);
+  const firstPlayerContainer = document.querySelector('.player-1-footer');
+  const secondPlayerContainer = document.querySelector('.player-2-footer');
   const tieCard = document.querySelector('.tie-card-container');
 
   firstPlayerContainer.classList.remove('hidden');
@@ -240,7 +234,7 @@ const setTimer = () => {
   }
 
   document.querySelector('#container').addEventListener('click', event => {
-    if (event.target.tagName === 'TD') {
+    if (event.target.tagName === 'TD' && event.target.className === '')  {
       clearInterval(timer);
     }
   });
