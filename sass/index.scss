@@ -326,6 +326,58 @@ main {
         width: 300px;
       }
     }
+    .tie-card-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      top: 57%;
+      right: 39.3%;
+      .tie-text-container {
+        text-align: center;
+        position: absolute;
+        top: 16px;
+        z-index: 1;
+        .tie-text {
+          font-size: 18px;
+          line-height: 21px;
+          text-transform: uppercase;
+          font-weight: 600;
+          margin-bottom: 28px;
+        }
+        .tie {
+          text-transform: uppercase;
+          font-size: 60px;
+          line-height: 21px;
+          font-weight: 600;
+          margin-bottom: 26px;
+        }
+        .tie-btn {
+          background-color: var(--clr-darkPurple);
+          border: none;
+          border-radius: 20px;
+          color: var(--clr-lightWhite);
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: 500;
+          height: 39px;
+          line-height: 21px;
+          text-transform: uppercase;
+          width: 108px;
+        }
+      }
+      .win-card {
+        background-color: var(--clr-lightWhite);
+        border: 3px solid black;
+        border-radius: 20px;
+        box-shadow: 0 10px 0 black;
+        flex-direction: row;
+        height: 160px;
+        position: relative;
+        width: 300px;
+      }
+    }
   }
   .footer-background {
     &.player-2-background {

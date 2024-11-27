@@ -10,13 +10,18 @@ function resetGame(callback) {
     .map(() => Array(6).fill(0));
   moveCount = 0;
   onChangeCallback = callback;
-  callback(-1);
+  callback(0);
 }
 
 // Drop a piece into a column
 function dropPiece(column) {
   const row = columns[column].indexOf(0);
-  if (row === -1 || getResult() !== 0 || !document.querySelector('.win-card-container').classList.contains('hidden')) return;
+  if (
+    row === -1 ||
+    getResult() !== 0 ||
+    !document.querySelector('.win-card-container').classList.contains('hidden')
+  )
+    return;
   columns[column][row] = (moveCount % 2) + 1;
   moveCount++;
   onChangeCallback(getResult());
@@ -66,7 +71,6 @@ function getResult() {
   const winner = checkWin(1) || checkWin(2);
   if (winner) return winner;
 
-
   return moveCount === 42 ? -1 : 0; // -1 for tie, 0 for ongoing
 }
 
@@ -101,8 +105,20 @@ function renderGame(result) {
     displayWinner(2);
     // clearInterval(setTimer());
   }
-  if(result == -1) {
-    console.log('TIE!');
+
+  console.log(result);
+  if (result == -1) {
+    displayTie();
+    document.querySelector('.tie-btn').addEventListener('click', () => {
+      resetGame(renderGame);
+
+      document.querySelector('.tie-card-container').classList.add('hidden');
+      document.querySelector('.player-1-footer').classList.remove('hidden');
+      document.querySelector('.player-2-footer').classList.add('hidden');
+
+      setTimer();
+    });
+    // clearInterval(setTimer());
   }
 
   setTimer();
@@ -111,6 +127,8 @@ function renderGame(result) {
 
 document.querySelector('.play-again-btn').addEventListener('click', () => {
   resetGame(renderGame);
+
+  console.log(5);
 
   document.querySelector('.win-card-container').classList.add('hidden');
   document.querySelector('.player-1-footer').classList.remove('hidden');
@@ -127,7 +145,6 @@ document.querySelector('.play-again-btn').addEventListener('click', () => {
   setTimer();
 });
 
-// Setup event listeners
 document.querySelector('#container').addEventListener('click', event => {
   if (event.target.tagName === 'TD') {
     const cell = event.target;
@@ -136,6 +153,7 @@ document.querySelector('#container').addEventListener('click', event => {
   }
 });
 
+//
 const clickRestartBtn = () => {
   const winCard = document.querySelector('.win-card-container');
 
@@ -150,6 +168,19 @@ const clickRestartBtn = () => {
 };
 clickRestartBtn();
 
+const displayTie = () => {
+  // const playerNum = player == 1 ? 2 : 1;
+
+  const firstPlayerContainer = document.querySelector(`.player-${1}-footer`);
+  const secondPlayerContainer = document.querySelector(`.player-${2}-footer`);
+  const tieCard = document.querySelector('.tie-card-container');
+
+  firstPlayerContainer.classList.remove('hidden');
+  secondPlayerContainer.classList.remove('hidden');
+  tieCard.classList.remove('hidden');
+};
+
+// Display the winner
 const displayWinner = player => {
   const playerNum = player == 1 ? 2 : 1;
 
@@ -170,6 +201,7 @@ const displayWinner = player => {
   playerScore.textContent = Number(playerScore.textContent) + 1;
 };
 
+// Chnage players turn
 const displayPlayer = () => {
   const playerOne = document.querySelector('.player-1-footer');
   const playerTwo = document.querySelector('.player-2-footer');
@@ -178,6 +210,7 @@ const displayPlayer = () => {
   playerTwo.classList.toggle('hidden');
 };
 
+// Set timer
 let counter = 1;
 const setTimer = () => {
   let sec = 5;
@@ -187,19 +220,21 @@ const setTimer = () => {
   const timerLabel = document.querySelector(`.player-${playerNum}-timer-label`);
   timerLabel.textContent = sec;
 
-  
   let timer = setInterval(function () {
     timerLabel.textContent = sec + '';
     sec--;
-    
+
     if (sec < -1) {
       clearInterval(timer);
       displayWinner(playerNum == 2 ? 1 : 2);
     }
   }, 1000);
-  
+
   if (
-    !document.querySelector('.win-card-container').classList.contains('hidden')
+    !document
+      .querySelector('.win-card-container')
+      .classList.contains('hidden') ||
+    !document.querySelector('.tie-card-container').classList.contains('hidden')
   ) {
     clearInterval(timer);
   }
